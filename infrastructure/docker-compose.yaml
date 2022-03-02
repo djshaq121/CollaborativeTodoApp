@@ -1,0 +1,12 @@
+# docker run --name dev -e POSTGRES_USER=appuser -e POSTGRES_PASSWORD=Password -p 5432:5432 -d postgres:latest
+version: '3.1'
+
+services:
+
+  postgresql:
+    image: postgres
+    environment:
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: Password
+    ports:
+      - '5432:5432'
