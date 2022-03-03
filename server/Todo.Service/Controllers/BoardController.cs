@@ -36,6 +36,17 @@ namespace Todo.Service.Controllers
             return Ok(board.AsDto());
         }
 
+        [HttpGet]
+        public async Task<ActionResult<BoardDto>> GetBoardById(int id)
+        {
+            var board = await boardRepository.GetBoardByIdAsync(id);
+
+            if (board == null)
+                NoContent();
+
+            return Ok(board);
+        }
+
 
     }
 }

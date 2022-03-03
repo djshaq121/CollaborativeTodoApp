@@ -39,7 +39,7 @@ namespace Todo.Service.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTodoItem(CreateTodoDto createTodoDto)
         {
-            var board =  await boardRepository.GetBoardByIdAsync(createTodoDto.BoardId);
+            var board = await boardRepository.GetBoardByIdAsync(createTodoDto.BoardId);
             if (board == null)
                 return BadRequest("Board does not exist");
 

@@ -1,7 +1,8 @@
-export class Todo {
+export interface Todo {
 
-    Id!: number;
-    title!: string;
-    desciption!: string;
-    createdDate!: Date;
+    id: number;
+    boardId: number;
+    title: string;
+    description: string;
+    createdDate: Date;
 }

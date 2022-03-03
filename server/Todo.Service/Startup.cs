@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Todo.Service.Data;
+using Todo.Service.Hubs;
 using Todo.Service.Repositories;
 
 namespace Todo.Service
@@ -34,9 +35,11 @@ namespace Todo.Service
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddSignalR();
             services.AddScoped<BoardRepository>();
             services.AddScoped<TodoRepository>();
 
+            services.AddCors();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -58,11 +61,14 @@ namespace Todo.Service
 
             app.UseRouting();
 
+            app.UseCors(opt => opt.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowCredentials().AllowAnyHeader());
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<TodoHub>("hubs/todo");
             });
         }
     }
