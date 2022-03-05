@@ -11,7 +11,7 @@ namespace Todo.Service
     {
         public static TodoDto AsDto(this TodoItem todo)
         {
-            return new TodoDto(todo.Id, todo.Title, todo.Desciption, todo.CreatedDate);
+            return new TodoDto(todo.Id, todo.Task, todo.IsCompleted, todo.CreatedDate);
         }
 
         public static BoardDto AsDto(this Board board)

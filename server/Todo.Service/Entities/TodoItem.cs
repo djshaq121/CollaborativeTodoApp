@@ -11,10 +11,10 @@ namespace Todo.Service.Entities
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(100)]
-        public string Title { get; set; }
+        [MaxLength(300)]
+        public string Task { get; set; }
 
-        public string Desciption { get; set; }
+        public bool IsCompleted { get; set; } = false;
 
         [Required]
         public DateTimeOffset CreatedDate { get; set; }

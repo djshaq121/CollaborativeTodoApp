@@ -45,8 +45,8 @@ namespace Todo.Service.Controllers
 
             var createdTodo = new TodoItem
             {
-                Title = createTodoDto.Title,
-                Desciption = createTodoDto.Description,
+                Task = createTodoDto.Task,
+                IsCompleted = createTodoDto.IsCompleted,
                 BoardId = board.Id,
                 CreatedDate = DateTimeOffset.Now
             };
@@ -71,8 +71,8 @@ namespace Todo.Service.Controllers
                 return NoContent();
 
 
-            todo.Title = updateTodoDto.Title;
-            todo.Desciption = updateTodoDto.Description;
+            todo.Task = updateTodoDto.Task;
+            todo.IsCompleted = updateTodoDto.IsCompleted;
 
             await todoRepository.SaveChangeAsync();
 

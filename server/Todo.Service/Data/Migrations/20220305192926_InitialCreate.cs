@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Todo.Service.Data.Migrations
 {
-    public partial class PostgressInitial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,8 +28,8 @@ namespace Todo.Service.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Desciption = table.Column<string>(type: "text", nullable: true),
+                    Task = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
+                    IsCompleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     BoardId = table.Column<int>(type: "integer", nullable: false)
                 },

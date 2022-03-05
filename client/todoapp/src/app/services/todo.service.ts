@@ -51,15 +51,16 @@ export class TodoService {
 
   async createTodo(createdTodo: Todo) {
     // 'AddTodo - is the method name on the server'
-    return this.hubConnection.invoke('AddTodo', {  boardId: createdTodo.boardId ?? 1, title: createdTodo.title, description: createdTodo.description })
+    const payload = {  boardId: createdTodo.boardId ?? 1, title: createdTodo.task };
+    return this.hubConnection.invoke('AddTodo', payload)
       .catch(error => console.log(error));
     
     //this.http.post(this.baseurl + 'todo', { createdTodo })
   }
 
-  // createTodoNW(createdTodo: Todo) {
-  //   return this.http.post(this.baseurl + 'todo', {  boardId: createdTodo.boardId ?? 1, title: createdTodo.title, description: createdTodo.description })
-  // }
+  createTodoNW(createdTodo: Todo) {
+    return this.http.post(this.baseurl + 'todo', createdTodo)
+  }
 
   getTodoItem(id: number) {
     return this.http.get(this.baseurl + 'todo/' + id.toString()).pipe(

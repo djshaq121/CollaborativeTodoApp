@@ -24,14 +24,14 @@ namespace Todo.Service.Hubs
         {
             // await Clients.Others.SendAsync("UserIsOnline"), );
 
-            var board = await boardRepository.GetBoardByIdAsync(1);
-            var name = board.Name;
+            //var board = await boardRepository.GetBoardByIdAsync(1);
+            //var name = board.Name;
 
-            await Groups.AddToGroupAsync(Context.ConnectionId, name);
+            //await Groups.AddToGroupAsync(Context.ConnectionId, name);
 
-            var todos = board.Todos.Select(x => x.AsDto());
+            //var todos = board.Todos.Select(x => x.AsDto());
 
-            await Clients.Group(name).SendAsync("ReceiveTodos", todos);
+            //await Clients.Group(name).SendAsync("ReceiveTodos", todos);
         }
 
         public async Task AddTodo(CreateTodoDto createTodoDto)
@@ -42,8 +42,8 @@ namespace Todo.Service.Hubs
 
             var createdTodo = new TodoItem
             {
-                Title = createTodoDto.Title,
-                Desciption = createTodoDto.Description,
+                Task = createTodoDto.Task,
+                IsCompleted = createTodoDto.IsCompleted,
                 BoardId = board.Id,
                 CreatedDate = DateTimeOffset.Now
             };

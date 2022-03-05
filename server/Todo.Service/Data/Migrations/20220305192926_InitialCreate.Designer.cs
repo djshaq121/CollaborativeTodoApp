@@ -10,8 +10,8 @@ using Todo.Service.Data;
 namespace Todo.Service.Data.Migrations
 {
     [DbContext(typeof(TodoContext))]
-    [Migration("20220228191727_PostgressInitial")]
-    partial class PostgressInitial
+    [Migration("20220305192926_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,13 +52,13 @@ namespace Todo.Service.Data.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Desciption")
-                        .HasColumnType("text");
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("boolean");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("Task")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
 
                     b.HasKey("Id");
 

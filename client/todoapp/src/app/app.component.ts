@@ -17,17 +17,17 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.createTodoForm = this.formBuilder.group({
-      title: ['', Validators.required],
-      description: ['', Validators.required]
+      task: ['', Validators.required],
     })
     this.todoService.getTodoItem(1).subscribe();
     this.todoService.createHubConnection();
   }
 
   createTodo() {
-      this.todoService.createTodo(this.createTodoForm.value).then(() => {
+    //this.todoService.createTodoNW(this.createTodoForm.value).subscribe();
+    this.todoService.createTodo(this.createTodoForm.value).then(() => {
         
-      })
+    })
   }
 
 }

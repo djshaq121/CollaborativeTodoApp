@@ -50,13 +50,13 @@ namespace Todo.Service.Data.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Desciption")
-                        .HasColumnType("text");
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("boolean");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("Task")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
 
                     b.HasKey("Id");
 
