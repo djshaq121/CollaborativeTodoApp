@@ -21,8 +21,11 @@ namespace Todo.Service.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BoardDto>> CreateBoard([FromQuery]string name)
+        public async Task<ActionResult<BoardDto>> CreateBoard(string name)
         {
+            if (string.IsNullOrEmpty(name))
+                return BadRequest("Name is empty");
+
             var board = new Board
             {
                 Name = name,

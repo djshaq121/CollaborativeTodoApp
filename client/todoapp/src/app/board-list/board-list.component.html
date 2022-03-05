@@ -1,0 +1,12 @@
+<div>
+    <div class="row">
+        <form class="col" [formGroup]='createBoardForm' (ngSubmit)="createBoard()">
+            <div class="col">
+                <input formControlName="name" type="text" class="form-control" id="floatingInput" placeholder="Create Board">
+            </div>
+            <div class="col mt-0" >
+                <button [disabled]='!createBoardForm.valid' class="mt-3 w-100 btn btn-primary btn-sm" type="submit">Create</button>
+            </div>
+        </form>
+    </div> 
+</div>

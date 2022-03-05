@@ -9,8 +9,8 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class TodoService {
 
-  baseurl = 'https://localhost:5001/'
-  huburl = 'https://localhost:5001/hubs/'
+  baseurl = 'https://localhost:5001/';
+  huburl = 'https://localhost:5001/hubs/';
   private hubConnection!: HubConnection;
   private todoItemsSource = new BehaviorSubject<Todo[]>([]);
   todoItems$ = this.todoItemsSource.asObservable();
@@ -59,7 +59,7 @@ export class TodoService {
   }
 
   createTodoNW(createdTodo: Todo) {
-    return this.http.post(this.baseurl + 'todo', createdTodo)
+    return this.http.post(this.baseurl + 'todo', createdTodo);
   }
 
   getTodoItem(id: number) {
