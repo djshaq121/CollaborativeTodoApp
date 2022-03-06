@@ -53,7 +53,7 @@ namespace Todo.Service.Hubs
 
             board.Todos.Add(createdTodo);
 
-            await todoRepository.CreateTodoItem(createdTodo);
+            await todoRepository.CreateTodoItemAsync(createdTodo);
             await todoRepository.SaveChangeAsync();
 
             var group = board.Name;

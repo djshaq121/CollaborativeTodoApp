@@ -9,7 +9,7 @@ using Todo.Service.TodoDtos;
 
 namespace Todo.Service.Repositories
 {
-    public class TodoRepository
+    public class TodoRepository : ITodoRepository
     {
         private readonly TodoContext todoContext;
         public TodoRepository(TodoContext todoContext)
@@ -17,19 +17,19 @@ namespace Todo.Service.Repositories
             this.todoContext = todoContext;
         }
 
-        public async Task<IEnumerable<TodoItem>> GetTodoItems()
+        public async Task<IEnumerable<TodoItem>> GetTodoItemsAsync()
         {
             return await todoContext.Todos.ToListAsync();
         }
 
-        public async Task<TodoItem> GetTodoItem(int id)
+        public async Task<TodoItem> GetTodoItemAsync(int id)
         {
             return await todoContext.Todos.SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task CreateTodoItem(TodoItem todoItems)
+        public async Task CreateTodoItemAsync(TodoItem todoItems)
         {
-            todoContext.Add(todoItems);
+            await todoContext.AddAsync(todoItems);
         }
 
         public async Task<bool> SaveChangeAsync()

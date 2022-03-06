@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +14,14 @@ namespace Todo.Service.Controllers
     [Route("[controller]")]
     public class BoardController : ControllerBase
     {
-        private readonly BoardRepository boardRepository;
+        private readonly IBoardRepository boardRepository;
 
-        public BoardController(BoardRepository boardRepository)
+        public BoardController(IBoardRepository boardRepository)
         {
             this.boardRepository = boardRepository;
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<BoardDto>> CreateBoard(string name)
         {
@@ -32,7 +34,7 @@ namespace Todo.Service.Controllers
                 CreatedDate = DateTimeOffset.UtcNow,
             };
 
-            await boardRepository.CreateBoard(board);
+            await boardRepository.CreateBoardAsync(board);
 
             await boardRepository.SaveChangeAsync();
             

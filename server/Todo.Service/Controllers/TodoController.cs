@@ -13,10 +13,10 @@ namespace Todo.Service.Controllers
     [Route("[controller]")]
     public class TodoController : ControllerBase
     {
-        private readonly BoardRepository boardRepository;
-        private readonly TodoRepository todoRepository;
+        private readonly IBoardRepository boardRepository;
+        private readonly ITodoRepository todoRepository;
 
-        public TodoController(BoardRepository boardRepository, TodoRepository todoRepository)
+        public TodoController(IBoardRepository boardRepository, ITodoRepository todoRepository)
         {
             this.boardRepository = boardRepository;
             this.todoRepository = todoRepository;
@@ -56,7 +56,7 @@ namespace Todo.Service.Controllers
 
             board.Todos.Add(createdTodo);
 
-            await todoRepository.CreateTodoItem(createdTodo);
+            await todoRepository.CreateTodoItemAsync(createdTodo);
 
             await todoRepository.SaveChangeAsync();
 
@@ -66,10 +66,9 @@ namespace Todo.Service.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdateTodoItem(UpdateTodoDto updateTodoDto)
         {
-            var todo = await todoRepository.GetTodoItem(updateTodoDto.TodoId);
+            var todo = await todoRepository.GetTodoItemAsync(updateTodoDto.TodoId);
             if (todo == null)
                 return NoContent();
-
 
             todo.Task = updateTodoDto.Task;
             todo.IsCompleted = updateTodoDto.IsCompleted;

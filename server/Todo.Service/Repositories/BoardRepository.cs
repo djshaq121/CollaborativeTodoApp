@@ -8,7 +8,7 @@ using Todo.Service.Entities;
 
 namespace Todo.Service.Repositories
 {
-    public class BoardRepository
+    public class BoardRepository : IBoardRepository
     {
         private readonly TodoContext todoContext;
         public BoardRepository(TodoContext todoContext)
@@ -23,9 +23,9 @@ namespace Todo.Service.Repositories
                 .SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task CreateBoard(Board board)
+        public async Task CreateBoardAsync(Board board)
         {
-           await todoContext.Boards.AddAsync(board);
+            await todoContext.Boards.AddAsync(board);
         }
 
         public async Task<bool> SaveChangeAsync()
