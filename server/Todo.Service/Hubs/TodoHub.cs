@@ -11,28 +11,28 @@ namespace Todo.Service.Hubs
 {
     public class TodoHub : Hub
     {
-        private readonly TodoRepository todoRepository;
-        private readonly BoardRepository boardRepository;
+        private readonly ITodoRepository todoRepository;
+        private readonly IBoardRepository boardRepository;
 
-        public TodoHub(TodoRepository todoRepository, BoardRepository boardRepository)
+        public TodoHub(ITodoRepository todoRepository, IBoardRepository boardRepository)
         {
             this.todoRepository = todoRepository;
             this.boardRepository = boardRepository;
         }
 
-        public override async Task OnConnectedAsync()
-        {
-            // await Clients.Others.SendAsync("UserIsOnline"), );
+        //public override async Task OnConnectedAsync()
+        //{
+        //    // await Clients.Others.SendAsync("UserIsOnline"), );
 
-            //var board = await boardRepository.GetBoardByIdAsync(1);
-            //var name = board.Name;
+        //    //var board = await boardRepository.GetBoardByIdAsync(1);
+        //    //var name = board.Name;
 
-            //await Groups.AddToGroupAsync(Context.ConnectionId, name);
+        //    //await Groups.AddToGroupAsync(Context.ConnectionId, name);
 
-            //var todos = board.Todos.Select(x => x.AsDto());
+        //    //var todos = board.Todos.Select(x => x.AsDto());
 
-            //await Clients.Group(name).SendAsync("ReceiveTodos", todos);
-        }
+        //    //await Clients.Group(name).SendAsync("ReceiveTodos", todos);
+        //}
 
         public async Task AddTodo(CreateTodoDto createTodoDto)
         {

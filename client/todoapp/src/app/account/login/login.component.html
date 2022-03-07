@@ -1,0 +1,21 @@
+<div class="row justify-content-md-center mt-5 text-center">
+    <form  class="col-auto" [formGroup]='loginForm' (ngSubmit)="login()">
+        <h1 class="h3 mb-3 fw-normal">sign in</h1>
+    
+        <div class="form-floating mb-2">
+          <input formControlName="username" type="text" class="form-control" id="floatingInput" placeholder="Username">
+          <label for="floatingInput">Username</label>
+        </div>
+        <div class="form-floating mb-2">
+          <input formControlName="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+          <label for="floatingPassword">Password</label>
+        </div>
+    
+        <button [disabled]="!loginForm.valid" class="mt-3 w-100 btn rounded-pill btn-primary" type="submit">Sign in</button>
+
+        <hr class="my-4">
+        <div class="text-center">
+          Don't have an account? <a routerLink="/register">Sign Up</a>
+        </div>
+    </form>
+</div>
