@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Todo.Service.Data;
 using Todo.Service.Entities;
+using Todo.Service.TodoDtos;
 
 namespace Todo.Service.Repositories
 {
@@ -31,6 +32,12 @@ namespace Todo.Service.Repositories
         public async Task<bool> SaveChangeAsync()
         {
             return await todoContext.SaveChangesAsync() > 0;
+        }
+
+        //For now just return all boards, until we create a userBoards link table. 
+        public async Task<ICollection<BoardDto>> GetBoardsByUserAsync(int userId)
+        {
+            return await todoContext.Boards.Select(x => x.AsDto()).ToListAsync(); 
         }
     }
 }

@@ -41,15 +41,24 @@ namespace Todo.Service.Controllers
             return Ok(board.AsDto());
         }
 
+        //[HttpGet]
+        //[Authorize]
+        //public async Task<ActionResult<BoardDto>> GetBoardById(int id)
+        //{
+        //    var board = await boardRepository.GetBoardByIdAsync(id);
+
+        //    if (board == null)
+        //        NoContent();
+
+        //    return Ok(board);
+        //}
+
         [HttpGet]
-        public async Task<ActionResult<BoardDto>> GetBoardById(int id)
+        public async Task<ActionResult<IReadOnlyCollection<BoardDto>>> GetAllBoardsForUser()
         {
-            var board = await boardRepository.GetBoardByIdAsync(id);
+            var boards = await boardRepository.GetBoardsByUserAsync(1);
 
-            if (board == null)
-                NoContent();
-
-            return Ok(board);
+            return Ok(boards);
         }
 
 

@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Todo.Service.Entities;
+using Todo.Service.TodoDtos;
 
 namespace Todo.Service.Repositories
 {
@@ -7,6 +9,9 @@ namespace Todo.Service.Repositories
     {
         Task CreateBoardAsync(Board board);
         Task<Board> GetBoardByIdAsync(int id);
+
+        Task<ICollection<BoardDto>> GetBoardsByUserAsync(int userId);
+
         Task<bool> SaveChangeAsync();
     }
 }

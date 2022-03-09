@@ -11,9 +11,10 @@ export class BoardListComponent implements OnInit {
 
   createBoardForm!: FormGroup;
   
-  constructor(private boardservice: BoardService, private formBuilder: FormBuilder) { }
+  constructor(public boardService: BoardService, private formBuilder: FormBuilder) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void { 
+    this.getAllBoards();
     this.createBoardForm = this.formBuilder.group({
       name: ['', Validators.required],
     })
@@ -21,7 +22,11 @@ export class BoardListComponent implements OnInit {
 
   createBoard(){
     const name = this.createBoardForm.get('name')?.value;
-    this.boardservice.createBoard(name).subscribe();
+    this.boardService.createBoard(name).subscribe();
+  }
+
+  getAllBoards() {
+    this.boardService.getBoards().subscribe();
   }
 
 }

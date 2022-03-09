@@ -28,6 +28,11 @@ export class AccountService {
     )
   }
 
+  logout() {
+    this.setCurrentUser(null);
+    localStorage.removeItem('user');
+  }
+
   register(userCreditials: any) {
     return this.http.post<User>(this.baseurl + 'register', userCreditials).pipe(
       map((user: User) => {

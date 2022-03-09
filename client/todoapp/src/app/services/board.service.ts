@@ -1,5 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ReplaySubject } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 import { Board } from '../model/board';
 
 @Injectable({
@@ -8,8 +10,10 @@ import { Board } from '../model/board';
 export class BoardService {
 
   baseurl = 'https://localhost:5001/';
-  boards: Board[] = [];
-
+  
+  private boardsSource = new ReplaySubject<Board[]>(1);
+  boards$ = this.boardsSource.asObservable();
+  
   constructor(private http: HttpClient) { }
 
   createBoard(boardName: string) {
@@ -18,6 +22,20 @@ export class BoardService {
 
     // console.log(params.toString());
     
-    return this.http.post(this.baseurl + 'board?name=' + boardName, {});
+    return this.http.post<Board>(this.baseurl + 'board?name=' + boardName, {}).pipe(
+      map((response) => {
+          this.boards$.pipe(take(1)).subscribe(boards => {
+            this.boardsSource.next([...boards, response]);
+          });
+      })
+    );
+  }
+
+  getBoards() {
+    return this.http.get<Board[]>(this.baseurl + 'board').pipe(
+      map(reponse => {
+        this.boardsSource.next(reponse);
+      })
+    );
   }
 }

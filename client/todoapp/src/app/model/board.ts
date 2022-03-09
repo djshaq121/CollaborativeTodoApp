@@ -3,6 +3,6 @@ import { Todo } from "./todo"
 export interface Board {
     id: number,
     title: string,
-    dateCreated: Date,
+    createdDate: Date,
     todos: Todo[],
 }
