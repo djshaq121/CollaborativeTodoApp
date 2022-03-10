@@ -8,5 +8,6 @@ namespace Todo.Service.Entities
 {
     public class AppUser : IdentityUser<int>
     {
+        public ICollection<UserBoard> UserBoards { get; set; }
     }
 }

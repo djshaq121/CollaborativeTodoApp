@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Todo.Service.Entities;
 using Todo.Service.Repositories;
@@ -15,10 +16,11 @@ namespace Todo.Service.Controllers
     public class BoardController : ControllerBase
     {
         private readonly IBoardRepository boardRepository;
-
-        public BoardController(IBoardRepository boardRepository)
+        private readonly IUserRepository userRepository;
+        public BoardController(IBoardRepository boardRepository, IUserRepository userRepository)
         {
             this.boardRepository = boardRepository;
+            this.userRepository = userRepository;
         }
 
         [Authorize]
@@ -28,13 +30,16 @@ namespace Todo.Service.Controllers
             if (string.IsNullOrEmpty(name))
                 return BadRequest("Name is empty");
 
+            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await userRepository.GetUserByUsernameAsync(username);
+
             var board = new Board
             {
                 Name = name,
                 CreatedDate = DateTimeOffset.UtcNow,
             };
 
-            await boardRepository.CreateBoardAsync(board);
+            await boardRepository.CreateBoardAsync(board, user);
 
             await boardRepository.SaveChangeAsync();
             
@@ -53,12 +58,16 @@ namespace Todo.Service.Controllers
         //    return Ok(board);
         //}
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyCollection<BoardDto>>> GetAllBoardsForUser()
         {
-            var boards = await boardRepository.GetBoardsByUserAsync(1);
+            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await userRepository.GetUserByUsernameAsync(username);
 
-            return Ok(boards);
+            var boards = await boardRepository.GetBoardsByUserAsync(user.Id);
+
+            return Ok(boards.Select(x => x.AsDto()));
         }
 
 

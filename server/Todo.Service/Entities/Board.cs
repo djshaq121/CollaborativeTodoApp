@@ -12,5 +12,7 @@ namespace Todo.Service.Entities
         public ICollection<TodoItem> Todos { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
 
+        public ICollection<UserBoard> UserBoards { get; set; }
+
     }
 }

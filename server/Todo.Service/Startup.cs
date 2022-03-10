@@ -45,7 +45,7 @@ namespace Todo.Service
             services.AddSignalR();
             services.AddScoped<IBoardRepository, BoardRepository>();
             services.AddScoped<ITodoRepository, TodoRepository>();
-
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddCors();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                .AddJwtBearer(options =>

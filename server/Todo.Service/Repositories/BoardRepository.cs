@@ -24,9 +24,19 @@ namespace Todo.Service.Repositories
                 .SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task CreateBoardAsync(Board board)
+        public async Task CreateBoardAsync(Board board, AppUser owner)
         {
             await todoContext.Boards.AddAsync(board);
+            var permissions = await todoContext.BoardPermissions.SingleOrDefaultAsync(x => x.Permission == Permission.Admin);
+
+            var userBoards = new UserBoard
+            {
+                UserId = owner.Id,
+                Board = board,
+                BoardPermissionId = permissions.Id
+            };
+
+            await todoContext.UserBoards.AddAsync(userBoards);
         }
 
         public async Task<bool> SaveChangeAsync()
@@ -34,10 +44,11 @@ namespace Todo.Service.Repositories
             return await todoContext.SaveChangesAsync() > 0;
         }
 
-        //For now just return all boards, until we create a userBoards link table. 
-        public async Task<ICollection<BoardDto>> GetBoardsByUserAsync(int userId)
+        public async Task<ICollection<Board>> GetBoardsByUserAsync(int userId)
         {
-            return await todoContext.Boards.Select(x => x.AsDto()).ToListAsync(); 
+            return await todoContext.Boards
+                .Where(b => b.UserBoards.Any(ub => ub.UserId == userId))
+                .ToListAsync(); 
         }
     }
 }
