@@ -6,6 +6,5 @@ namespace Todo.Service.Repositories
     public interface IUserRepository
     {
         Task<AppUser> GetUserByUsernameAsync(string username);
-        Task<bool> SaveAllAsync();
     }
 }

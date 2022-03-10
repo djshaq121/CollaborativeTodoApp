@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Todo.Service.Entities;
 using Todo.Service.Repositories;
 using Todo.Service.TodoDtos;
+using Todo.Service.UnitOfWorkRepository;
 
 namespace Todo.Service.Controllers
 {
@@ -13,19 +14,17 @@ namespace Todo.Service.Controllers
     [Route("[controller]")]
     public class TodoController : ControllerBase
     {
-        private readonly IBoardRepository boardRepository;
-        private readonly ITodoRepository todoRepository;
+        private readonly IUnitOfWork unitOfWork;
 
-        public TodoController(IBoardRepository boardRepository, ITodoRepository todoRepository)
+        public TodoController(IUnitOfWork unitOfWork)
         {
-            this.boardRepository = boardRepository;
-            this.todoRepository = todoRepository;
+            this.unitOfWork = unitOfWork;
         }
 
         [HttpGet("{boardId}")]
         public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems(int boardId)
         {
-            var board = await boardRepository.GetBoardByIdAsync(boardId);
+            var board = await unitOfWork.BoardRepository.GetBoardByIdAsync(boardId);
             if (board == null)
                 return NotFound();
 
@@ -39,7 +38,7 @@ namespace Todo.Service.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTodoItem(CreateTodoDto createTodoDto)
         {
-            var board = await boardRepository.GetBoardByIdAsync(createTodoDto.BoardId);
+            var board = await unitOfWork.BoardRepository.GetBoardByIdAsync(createTodoDto.BoardId);
             if (board == null)
                 return BadRequest("Board does not exist");
 
@@ -48,7 +47,7 @@ namespace Todo.Service.Controllers
                 Task = createTodoDto.Task,
                 IsCompleted = createTodoDto.IsCompleted,
                 BoardId = board.Id,
-                CreatedDate = DateTimeOffset.Now
+                CreatedDate = DateTimeOffset.UtcNow
             };
 
             if (board.Todos == null)
@@ -56,9 +55,9 @@ namespace Todo.Service.Controllers
 
             board.Todos.Add(createdTodo);
 
-            await todoRepository.CreateTodoItemAsync(createdTodo);
+            await unitOfWork.TodoRepository.CreateTodoItemAsync(createdTodo);
 
-            await todoRepository.SaveChangeAsync();
+            await unitOfWork.SaveAsync();
 
             return NoContent();
         }
@@ -66,14 +65,14 @@ namespace Todo.Service.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdateTodoItem(UpdateTodoDto updateTodoDto)
         {
-            var todo = await todoRepository.GetTodoItemAsync(updateTodoDto.TodoId);
+            var todo = await unitOfWork.TodoRepository.GetTodoItemAsync(updateTodoDto.TodoId);
             if (todo == null)
                 return NoContent();
 
             todo.Task = updateTodoDto.Task;
             todo.IsCompleted = updateTodoDto.IsCompleted;
 
-            await todoRepository.SaveChangeAsync();
+            await unitOfWork.SaveAsync();
 
             return Ok();
         }

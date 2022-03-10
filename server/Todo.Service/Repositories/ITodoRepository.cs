@@ -9,6 +9,5 @@ namespace Todo.Service.Repositories
         Task CreateTodoItemAsync(TodoItem todoItems);
         Task<TodoItem> GetTodoItemAsync(int id);
         Task<IEnumerable<TodoItem>> GetTodoItemsAsync();
-        Task<bool> SaveChangeAsync();
     }
 }

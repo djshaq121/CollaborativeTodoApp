@@ -4,20 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Todo.Service.Entities;
-using Todo.Service.Repositories;
 using Todo.Service.TodoDtos;
+using Todo.Service.UnitOfWorkRepository;
 
 namespace Todo.Service.Hubs
 {
     public class TodoHub : Hub
     {
-        private readonly ITodoRepository todoRepository;
-        private readonly IBoardRepository boardRepository;
+        private readonly IUnitOfWork unitOfWork;
 
-        public TodoHub(ITodoRepository todoRepository, IBoardRepository boardRepository)
+        public TodoHub(IUnitOfWork unitOfWork)
         {
-            this.todoRepository = todoRepository;
-            this.boardRepository = boardRepository;
+            this.unitOfWork = unitOfWork;
         }
 
         //public override async Task OnConnectedAsync()
@@ -36,7 +34,7 @@ namespace Todo.Service.Hubs
 
         public async Task AddTodo(CreateTodoDto createTodoDto)
         {
-            var board = await boardRepository.GetBoardByIdAsync(createTodoDto.BoardId);
+            var board = await unitOfWork.BoardRepository.GetBoardByIdAsync(createTodoDto.BoardId);
             if (board == null)
                throw new HubException("Board does not exist");
 
@@ -45,7 +43,7 @@ namespace Todo.Service.Hubs
                 Task = createTodoDto.Task,
                 IsCompleted = createTodoDto.IsCompleted,
                 BoardId = board.Id,
-                CreatedDate = DateTimeOffset.Now
+                CreatedDate = DateTimeOffset.UtcNow
             };
 
             if (board.Todos == null)
@@ -53,8 +51,8 @@ namespace Todo.Service.Hubs
 
             board.Todos.Add(createdTodo);
 
-            await todoRepository.CreateTodoItemAsync(createdTodo);
-            await todoRepository.SaveChangeAsync();
+            await unitOfWork.TodoRepository.CreateTodoItemAsync(createdTodo);
+            await unitOfWork.SaveAsync();
 
             var group = board.Name;
             await Clients.Group(group).SendAsync("AddNewTodoItem", createdTodo.AsDto());

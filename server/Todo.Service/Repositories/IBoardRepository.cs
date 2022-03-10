@@ -12,6 +12,5 @@ namespace Todo.Service.Repositories
 
         Task<ICollection<Board>> GetBoardsByUserAsync(int userId);
 
-        Task<bool> SaveChangeAsync();
     }
 }

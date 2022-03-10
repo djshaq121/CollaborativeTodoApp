@@ -31,10 +31,5 @@ namespace Todo.Service.Repositories
         {
             await todoContext.AddAsync(todoItems);
         }
-
-        public async Task<bool> SaveChangeAsync()
-        {
-            return await todoContext.SaveChangesAsync() > 0;
-        }
     }
 }

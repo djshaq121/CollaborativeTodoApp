@@ -21,6 +21,7 @@ using Todo.Service.Entities;
 using Todo.Service.Hubs;
 using Todo.Service.Repositories;
 using Todo.Service.Services;
+using Todo.Service.UnitOfWorkRepository;
 
 namespace Todo.Service
 {
@@ -43,6 +44,7 @@ namespace Todo.Service
             });
 
             services.AddSignalR();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IBoardRepository, BoardRepository>();
             services.AddScoped<ITodoRepository, TodoRepository>();
             services.AddScoped<IUserRepository, UserRepository>();

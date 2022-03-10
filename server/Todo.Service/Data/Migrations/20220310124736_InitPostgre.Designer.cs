@@ -10,8 +10,8 @@ using Todo.Service.Data;
 namespace Todo.Service.Data.Migrations
 {
     [DbContext(typeof(TodoContext))]
-    [Migration("20220309202031_UserBoardsWithPermissions")]
-    partial class UserBoardsWithPermissions
+    [Migration("20220310124736_InitPostgre")]
+    partial class InitPostgre
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

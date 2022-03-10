@@ -6,8 +6,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Todo.Service.Entities;
-using Todo.Service.Repositories;
 using Todo.Service.TodoDtos;
+using Todo.Service.UnitOfWorkRepository;
 
 namespace Todo.Service.Controllers
 {
@@ -15,12 +15,11 @@ namespace Todo.Service.Controllers
     [Route("[controller]")]
     public class BoardController : ControllerBase
     {
-        private readonly IBoardRepository boardRepository;
-        private readonly IUserRepository userRepository;
-        public BoardController(IBoardRepository boardRepository, IUserRepository userRepository)
+        private readonly IUnitOfWork unitOfWork;
+
+        public BoardController(IUnitOfWork unitOfWork)
         {
-            this.boardRepository = boardRepository;
-            this.userRepository = userRepository;
+            this.unitOfWork = unitOfWork;
         }
 
         [Authorize]
@@ -31,7 +30,7 @@ namespace Todo.Service.Controllers
                 return BadRequest("Name is empty");
 
             var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var user = await userRepository.GetUserByUsernameAsync(username);
+            var user = await unitOfWork.UserRepository.GetUserByUsernameAsync(username);
 
             var board = new Board
             {
@@ -39,9 +38,9 @@ namespace Todo.Service.Controllers
                 CreatedDate = DateTimeOffset.UtcNow,
             };
 
-            await boardRepository.CreateBoardAsync(board, user);
+            await unitOfWork.BoardRepository.CreateBoardAsync(board, user);
 
-            await boardRepository.SaveChangeAsync();
+            await unitOfWork.SaveAsync();
             
             return Ok(board.AsDto());
         }
@@ -63,9 +62,9 @@ namespace Todo.Service.Controllers
         public async Task<ActionResult<IReadOnlyCollection<BoardDto>>> GetAllBoardsForUser()
         {
             var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var user = await userRepository.GetUserByUsernameAsync(username);
+            var user = await unitOfWork.UserRepository.GetUserByUsernameAsync(username);
 
-            var boards = await boardRepository.GetBoardsByUserAsync(user.Id);
+            var boards = await unitOfWork.BoardRepository.GetBoardsByUserAsync(user.Id);
 
             return Ok(boards.Select(x => x.AsDto()));
         }

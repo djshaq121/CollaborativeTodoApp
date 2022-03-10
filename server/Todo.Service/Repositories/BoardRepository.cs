@@ -29,6 +29,9 @@ namespace Todo.Service.Repositories
             await todoContext.Boards.AddAsync(board);
             var permissions = await todoContext.BoardPermissions.SingleOrDefaultAsync(x => x.Permission == Permission.Admin);
 
+            if (permissions == null)
+                throw new NullReferenceException();
+
             var userBoards = new UserBoard
             {
                 UserId = owner.Id,
@@ -37,11 +40,6 @@ namespace Todo.Service.Repositories
             };
 
             await todoContext.UserBoards.AddAsync(userBoards);
-        }
-
-        public async Task<bool> SaveChangeAsync()
-        {
-            return await todoContext.SaveChangesAsync() > 0;
         }
 
         public async Task<ICollection<Board>> GetBoardsByUserAsync(int userId)
