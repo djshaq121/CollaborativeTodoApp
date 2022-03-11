@@ -29,7 +29,7 @@ namespace Todo.Service.Controllers
             if (string.IsNullOrEmpty(name))
                 return BadRequest("Name is empty");
 
-            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var username = User.GetUsername();
             var user = await unitOfWork.UserRepository.GetUserByUsernameAsync(username);
 
             var board = new Board
@@ -61,7 +61,7 @@ namespace Todo.Service.Controllers
         [HttpGet]
         public async Task<ActionResult<IReadOnlyCollection<BoardDto>>> GetAllBoardsForUser()
         {
-            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var username = User.GetUsername();
             var user = await unitOfWork.UserRepository.GetUserByUsernameAsync(username);
 
             var boards = await unitOfWork.BoardRepository.GetBoardsByUserAsync(user.Id);

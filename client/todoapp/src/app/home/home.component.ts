@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BoardService } from '../services/board.service';
 import { TodoService } from '../services/todo.service';
 
 @Component({
@@ -11,12 +12,12 @@ export class HomeComponent implements OnInit {
 
   createTodoForm!: FormGroup;
   
-  constructor(public todoService: TodoService,  private formBuilder: FormBuilder) { }
+  constructor(public boardService: BoardService,  private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.initForm();
-    this.todoService.getTodoItem(1).subscribe();
-    this.todoService.createHubConnection();
+   // this.todoService.getTodoItem(1).subscribe();
+   // this.todoService.createHubConnection();
   }
 
   initForm() {
@@ -27,7 +28,7 @@ export class HomeComponent implements OnInit {
 
   createTodo() {
     //this.todoService.createTodoNW(this.createTodoForm.value).subscribe();
-    this.todoService.createTodo(this.createTodoForm.value).then(() => {
+    this.boardService.createTodo(this.createTodoForm.value).then(() => {
         
     })
   }

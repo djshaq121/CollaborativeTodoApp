@@ -42,8 +42,7 @@ namespace Todo.Service
             {
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
             });
-
-            services.AddSignalR();
+            
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IBoardRepository, BoardRepository>();
             services.AddScoped<ITodoRepository, TodoRepository>();
@@ -58,6 +57,22 @@ namespace Todo.Service
                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"])),
                        ValidateIssuer = false,
                        ValidateAudience = false
+                   };
+
+                   options.Events = new JwtBearerEvents
+                   {
+                       OnMessageReceived = context =>
+                       {
+                           var accessToken = context.Request.Query["access_token"];
+
+                           var path = context.HttpContext.Request.Path;
+                           if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+                           {
+                               context.Token = accessToken;
+                           }
+
+                           return Task.CompletedTask;
+                       }
                    };
                });
             services.AddControllers();
@@ -77,6 +92,8 @@ namespace Todo.Service
             .AddRoles<IdentityRole<int>>()
             .AddSignInManager<SignInManager<AppUser>>()
             .AddEntityFrameworkStores<TodoContext>();
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -93,7 +110,10 @@ namespace Todo.Service
 
             app.UseRouting();
 
-            app.UseCors(opt => opt.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowCredentials().AllowAnyHeader());
+            app.UseCors(x => x.AllowAnyHeader()
+                 .AllowAnyMethod()
+                 .AllowCredentials()
+                 .WithOrigins("http://localhost:4200"));
 
             app.UseAuthentication();
 
@@ -103,6 +123,7 @@ namespace Todo.Service
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<TodoHub>("hubs/todo");
+                endpoints.MapHub<BoardHub>("hubs/board");
             });
         }
     }

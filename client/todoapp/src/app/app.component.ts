@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.SetAlreadySignInUser();
-    this.todoService.createHubConnection();
+   // this.todoService.createHubConnection();
   }
 
   SetAlreadySignInUser() {
@@ -27,12 +27,5 @@ export class AppComponent implements OnInit {
     this.accountService.setCurrentUser(user);
     
   }
-
-  createTodo() {
-    //this.todoService.createTodoNW(this.createTodoForm.value).subscribe();
-    this.todoService.createTodo(this.createTodoForm.value).then(() => {
-        
-    })
-  }
-
+  
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ using Todo.Service.UnitOfWorkRepository;
 
 namespace Todo.Service.Hubs
 {
+    [Authorize]
     public class TodoHub : Hub
     {
         private readonly IUnitOfWork unitOfWork;
@@ -18,19 +20,19 @@ namespace Todo.Service.Hubs
             this.unitOfWork = unitOfWork;
         }
 
-        //public override async Task OnConnectedAsync()
-        //{
-        //    // await Clients.Others.SendAsync("UserIsOnline"), );
+        public override async Task OnConnectedAsync()
+        {
+            // await Clients.Others.SendAsync("UserIsOnline"), );
 
-        //    //var board = await boardRepository.GetBoardByIdAsync(1);
-        //    //var name = board.Name;
+            //var board = await boardRepository.GetBoardByIdAsync(1);
+            //var name = board.Name;
 
-        //    //await Groups.AddToGroupAsync(Context.ConnectionId, name);
+            //await Groups.AddToGroupAsync(Context.ConnectionId, name);
 
-        //    //var todos = board.Todos.Select(x => x.AsDto());
+            //var todos = board.Todos.Select(x => x.AsDto());
 
-        //    //await Clients.Group(name).SendAsync("ReceiveTodos", todos);
-        //}
+            //await Clients.Group(name).SendAsync("ReceiveTodos", todos);
+        }
 
         public async Task AddTodo(CreateTodoDto createTodoDto)
         {

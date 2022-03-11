@@ -9,7 +9,7 @@ namespace Todo.Service.TodoDtos
 
     public record UpdateTodoDto(int BoardId, int TodoId, string Task, bool IsCompleted);
 
-    public record BoardDto(int Id, string Title, DateTimeOffset CreatedDate);
+    public record BoardDto(int Id, string Title, DateTimeOffset CreatedDate, ICollection<TodoDto> Todos);
 
     public record TodoDto(int Id, string Task, bool IsCompleted, DateTimeOffset CreatedDate);
 }

@@ -19,7 +19,7 @@
       <div class="col">
         <h3>Todo List</h3>
         <div>
-          <div *ngFor="let item of todoService.todoItems$ | async">
+          <div *ngFor="let item of (boardService.currentBoard$ | async)?.todos">
               <app-todo-item [todo]='item'></app-todo-item>
           </div>
         </div>

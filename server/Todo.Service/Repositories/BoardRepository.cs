@@ -42,6 +42,14 @@ namespace Todo.Service.Repositories
             await todoContext.UserBoards.AddAsync(userBoards);
         }
 
+        //public async Task<Board> GetBoard(Func<Board, bool> expression)
+        //{
+        //    return await todoContext.Boards
+        //        .Include(b => b.Todos)
+        //        .SingleOrDefaultAsync(expression);
+                
+        //}
+
         public async Task<ICollection<Board>> GetBoardsByUserAsync(int userId)
         {
             return await todoContext.Boards

@@ -3,4 +3,5 @@ export interface Todo {
     boardId: number;
     task: string;
     createdDate: Date;
+    isCompleted: boolean;
 }

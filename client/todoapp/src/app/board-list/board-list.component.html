@@ -13,7 +13,7 @@
 
         <div class="col mt-4">
             <ul class="list-unstyled">
-                <li class="d-flex justify-content-between mb-2" *ngFor="let board of (boardService.boards$ | async)">
+                <li class="d-flex justify-content-between mb-2" *ngFor="let board of (boardService.boards$ | async)" (click)="selectBoard(board)">
                     <h6 class="">{{board.title}} </h6>
                     <span class="text-muted">  {{ board.createdDate | date: 'dd/MM/yyyy'}} </span>
                 </li>

@@ -19,7 +19,9 @@ namespace Todo.Service.Repositories
 
         public async Task<AppUser> GetUserByUsernameAsync(string username)
         {
-            return await context.Users.SingleOrDefaultAsync(x => x.UserName == username);
+            return await context.Users
+                .Include(u => u.UserBoards)
+                .SingleOrDefaultAsync(x => x.UserName == username);
         }
     }
 }
