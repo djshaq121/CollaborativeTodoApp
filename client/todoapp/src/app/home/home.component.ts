@@ -10,27 +10,7 @@ import { TodoService } from '../services/todo.service';
 })
 export class HomeComponent implements OnInit {
 
-  createTodoForm!: FormGroup;
-  
-  constructor(public boardService: BoardService,  private formBuilder: FormBuilder) { }
+  constructor() { }
 
-  ngOnInit(): void {
-    this.initForm();
-   // this.todoService.getTodoItem(1).subscribe();
-   // this.todoService.createHubConnection();
-  }
-
-  initForm() {
-    this.createTodoForm = this.formBuilder.group({
-      task: ['', Validators.required],
-    })
-  }
-
-  createTodo() {
-    //this.todoService.createTodoNW(this.createTodoForm.value).subscribe();
-    this.boardService.createTodo(this.createTodoForm.value).then(() => {
-        
-    })
-  }
-
+  ngOnInit(): void {}
 }

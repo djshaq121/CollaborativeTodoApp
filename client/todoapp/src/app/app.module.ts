@@ -13,6 +13,8 @@ import { LoginComponent } from './account/login/login.component';
 import { RegisterComponent } from './account/register/register.component';
 import { HomeComponent } from './home/home.component';
 import { JwtInterceptor } from './_Interceptors/jwt.interceptor';
+import { MenuComponent } from './menu/menu.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { JwtInterceptor } from './_Interceptors/jwt.interceptor';
     BoardListComponent,
     LoginComponent,
     RegisterComponent,
-    HomeComponent
+    HomeComponent,
+    MenuComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

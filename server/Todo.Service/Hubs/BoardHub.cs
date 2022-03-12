@@ -38,7 +38,7 @@ namespace Todo.Service.Hubs
             await Groups.AddToGroupAsync(Context.ConnectionId, boardId.ToString());
 
             // Cycle found in board - return Dto's and not entity
-            await Clients.Group(boardId.ToString()).SendAsync("ReceiveBoardUpdatedBoard", board.AsDto());
+            await Clients.Caller.SendAsync("ReceiveBoardUpdatedBoard", board.AsDto());
 
         }
 
