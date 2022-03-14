@@ -47,16 +47,13 @@ export class TodoService {
   }
 
   async createTodo(createdTodo: Todo) {
-    // 'AddTodo - is the method name on the server'
     const payload = {  boardId: createdTodo.boardId ?? 1, title: createdTodo.task };
     return this.hubConnection.invoke('AddTodo', payload)
       .catch(error => console.log(error));
-    
-    //this.http.post(this.baseurl + 'todo', { createdTodo })
   }
 
-  createTodoNW(createdTodo: Todo) {
-    return this.http.post(this.baseurl + 'todo', createdTodo);
+  updateTodoItem(updatedTodo: Todo) {
+    return this.http.put(this.baseurl + 'todo', updatedTodo);
   }
 
   getTodoItem(id: number) {

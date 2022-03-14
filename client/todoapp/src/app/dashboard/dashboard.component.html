@@ -5,26 +5,17 @@
 <div *ngIf="this.boardService.currentBoard$ | async">
     
     <h3> {{(this.boardService.currentBoard$ | async).title }} </h3>
-    
-    <!-- <div *ngFor="let item of (boardService.currentBoard$ | async)?.todos">
-        <app-todo-item [todo]='item'></app-todo-item>
-    </div> -->
 
     <form [formGroup]='createTodoForm' class="input-group mt-3 mb-3 row" (ngSubmit)="createTodo()" > 
         <span class="input-group-prepend input-group-text"><i class="fa fa-plus " aria-hidden="true"></i></span>
         <input formControlName="task" class="mr-2 form-control" placeholder="Add a task" ptype="text" id="AddItem">
         <span><button [disabled]="!createTodoForm.valid" class="btn btn-primary">Add</button></span>
     </form>
-    <ul class="todo-items list-group">
-        <div *ngIf="!(boardService.currentBoard$ | async)?.todos"> No Tasks! </div>
-        <li class="form-check d-flex mb-4" *ngFor="let todo of (boardService.currentBoard$ | async)?.todos">
-            <input class="form-check-input me-2" type="checkbox" value="" id="{{todo.id}}" [checked]=todo.isCompleted />
-            <label class="form-check-label" for="{{todo.id}}">
-                {{todo.task}}
-            </label>
-            
-        </li>
-    </ul>
+    <div>
+        <div *ngFor="let item of (boardService.currentBoard$ | async)?.todos">
+            <app-todo-item [todo]='item'></app-todo-item>
+        </div>
+    </div>
 
     
 </div>

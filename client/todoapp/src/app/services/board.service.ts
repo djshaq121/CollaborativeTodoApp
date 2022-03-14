@@ -42,11 +42,15 @@ export class BoardService {
       this.selectedBoardSource.next(board);
     })
 
-      this.hubConnection.on('newTodoItem', todo => {
+    this.hubConnection.on('newTodoItem', todo => {
         this.currentBoard$.pipe(take(1)).subscribe(board => {
           board.todos = [...board.todos, todo];
           this.selectedBoardSource.next(board);
-        })
+        });
+    })
+
+    this.hubConnection.on('TodoItemUpdated', todoItem => {
+      this.updateTodoItem(todoItem);
     })
   }
 
@@ -58,12 +62,17 @@ export class BoardService {
     return Promise.resolve();
   }
 
-  createBoard(boardName: string) {
-    // const params = new HttpParams();
-    // params.set('name', boardName);
+  private updateTodoItem(updatedTodoItem: Todo) {
+    this.currentBoard$.pipe(take(1)).subscribe(board => {
+      let foundIndex = board.todos.findIndex(item => item.id == updatedTodoItem.id);
+      if (foundIndex == -1)
+        return;
 
-    // console.log(params.toString());
-    
+        board.todos[foundIndex] = updatedTodoItem;
+    })
+  }
+
+  createBoard(boardName: string) {
     return this.http.post<Board>(this.baseurl + 'board?name=' + boardName, {}).pipe(
       map((response) => {
           this.boards$.pipe(take(1)).subscribe(boards => {

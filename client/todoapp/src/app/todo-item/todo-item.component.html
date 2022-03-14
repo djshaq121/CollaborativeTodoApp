@@ -1,4 +1,21 @@
-<div class="checkbox-container">
-    <input type="checkbox" id="">
-    <label for="">{{todo.task}}</label>
+<div class="form-check d-flex mb-4">
+    <input 
+    class="form-check-input me-2" 
+    type="checkbox" 
+    [(ngModel)]="todo.isCompleted" 
+    (ngModelChange)="onTaskCompleteChange()" 
+    id="{{todo.id}}" 
+    [checked]=todo.isCompleted />
+    <label class="form-check-label" *ngIf="!editingTask" (click)="editTask()">
+        {{todo.task}}
+    </label>
+    <form [formGroup]='todoForm'>
+        <input formControlName="task" class="form-check-label" type="text" *ngIf="editingTask">
+        <button 
+        [disabled]="!todoForm.dirty || !todoForm.valid" 
+        class="ml-2 btn btn-primary btn-sm" 
+        *ngIf="editingTask" 
+        (click)="updateTask()">Update</button>
+        <button class="ml-2 btn btn-secondary btn-sm" *ngIf="editingTask" (click)="cancelChange()">Cancel</button>
+    </form>
 </div>

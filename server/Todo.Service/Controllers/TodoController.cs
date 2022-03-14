@@ -1,24 +1,30 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Todo.Service.Entities;
+using Todo.Service.Hubs;
 using Todo.Service.Repositories;
 using Todo.Service.TodoDtos;
 using Todo.Service.UnitOfWorkRepository;
 
 namespace Todo.Service.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class TodoController : ControllerBase
     {
+        private readonly IHubContext<BoardHub> boardHubContext;
         private readonly IUnitOfWork unitOfWork;
 
-        public TodoController(IUnitOfWork unitOfWork)
+        public TodoController(IUnitOfWork unitOfWork, IHubContext<BoardHub> boardHubContext)
         {
             this.unitOfWork = unitOfWork;
+            this.boardHubContext = boardHubContext;
         }
 
         [HttpGet("{boardId}")]
@@ -65,14 +71,18 @@ namespace Todo.Service.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdateTodoItem(UpdateTodoDto updateTodoDto)
         {
-            var todo = await unitOfWork.TodoRepository.GetTodoItemAsync(updateTodoDto.TodoId);
+            var todo = await unitOfWork.TodoRepository.GetTodoItemAsync(updateTodoDto.Id);
             if (todo == null)
                 return NoContent();
 
             todo.Task = updateTodoDto.Task;
             todo.IsCompleted = updateTodoDto.IsCompleted;
 
-            await unitOfWork.SaveAsync();
+            if(await unitOfWork.SaveAsync())
+            {
+                // notify users
+                await boardHubContext.Clients.Group(todo.BoardId.ToString()).SendAsync("TodoItemUpdated", todo.AsDto());
+            }
 
             return Ok();
         }

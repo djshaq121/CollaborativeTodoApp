@@ -67,7 +67,7 @@ namespace Todo.Service.Hubs
 
             if (await unitOfWork.SaveAsync())
             {
-                await Clients.Group(board.Id.ToString()).SendAsync("newTodoItem", todo.AsDto());
+                await Clients.Group(board.Id.ToString()).SendAsync("NewTodoItem", todo.AsDto());
             }
 
         }
