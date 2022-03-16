@@ -8,6 +8,7 @@ namespace Todo.Service.UnitOfWorkRepository
         IBoardRepository BoardRepository { get; }
         IUserRepository UserRepository { get; }
         ITodoRepository TodoRepository { get; }
+        IBoardSharedRepository BoardSharedRepository { get; }
 
         bool HasChanges();
         Task<bool> SaveAsync();

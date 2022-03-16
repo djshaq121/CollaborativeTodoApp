@@ -21,6 +21,7 @@ namespace Todo.Service.Repositories
         {
             return await context.Users
                 .Include(u => u.UserBoards)
+                .ThenInclude(ub => ub.BoardPermission)
                 .SingleOrDefaultAsync(x => x.UserName == username);
         }
     }

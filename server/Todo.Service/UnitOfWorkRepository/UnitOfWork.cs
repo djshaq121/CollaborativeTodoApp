@@ -19,6 +19,7 @@ namespace Todo.Service.UnitOfWorkRepository
         public IBoardRepository BoardRepository => new BoardRepository(context);
         public IUserRepository UserRepository => new UserRepository(context);
         public ITodoRepository TodoRepository => new TodoRepository(context);
+        public IBoardSharedRepository BoardSharedRepository => new BoardSharedRepository(context);
 
         public async Task<bool> SaveAsync()
         {

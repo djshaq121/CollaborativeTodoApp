@@ -8,6 +8,7 @@ namespace Todo.Service.Repositories
     public interface IBoardRepository
     {
         Task CreateBoardAsync(Board board, AppUser owner);
+        Task AddUserBoardAsync(UserBoard userBoard);
         Task<Board> GetBoardByIdAsync(int id);
 
         Task<ICollection<Board>> GetBoardsByUserAsync(int userId);

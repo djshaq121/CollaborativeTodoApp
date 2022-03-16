@@ -5,6 +5,7 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using Todo.Service.Controllers;
 using Todo.Service.Entities;
+using Todo.Service.Services;
 using Todo.Service.UnitOfWorkRepository;
 using Xunit;
 
@@ -14,12 +15,14 @@ namespace TodoAppTests
     public class BoardControllerTests
     {
         private readonly Mock<IUnitOfWork> mockUnitOfWork;
+        private readonly Mock<IShareableService> mockShareableService;
         private readonly BoardController boardController;
 
         public BoardControllerTests()
         {
             mockUnitOfWork = new Mock<IUnitOfWork>();
-            boardController = new BoardController(mockUnitOfWork.Object);
+            mockShareableService = new Mock<IShareableService>();
+            boardController = new BoardController(mockUnitOfWork.Object, mockShareableService.Object);
         }
 
 

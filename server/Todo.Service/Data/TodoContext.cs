@@ -44,5 +44,7 @@ namespace Todo.Service.Data
         public DbSet<BoardPermission> BoardPermissions { get; set; }
 
         public DbSet<UserBoard> UserBoards { get; set; }
+
+        public DbSet<BoardShare> BoardShares { get; set; }
     }
 }

@@ -44,6 +44,7 @@ namespace Todo.Service
             });
             
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IShareableService, ShareableService>();
             services.AddScoped<IBoardRepository, BoardRepository>();
             services.AddScoped<ITodoRepository, TodoRepository>();
             services.AddScoped<IUserRepository, UserRepository>();

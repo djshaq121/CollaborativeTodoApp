@@ -24,6 +24,13 @@ namespace Todo.Service.Repositories
                 .SingleOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<ICollection<Board>> GetBoardsByUserAsync(int userId)
+        {
+            return await todoContext.Boards
+                .Where(b => b.UserBoards.Any(ub => ub.UserId == userId))
+                .ToListAsync();
+        }
+
         public async Task CreateBoardAsync(Board board, AppUser owner)
         {
             await todoContext.Boards.AddAsync(board);
@@ -39,22 +46,14 @@ namespace Todo.Service.Repositories
                 BoardPermissionId = permissions.Id
             };
 
-            await todoContext.UserBoards.AddAsync(userBoards);
+            await AddUserBoardAsync(userBoards);
         }
 
-        //public async Task<Board> GetBoard(Func<Board, bool> expression)
-        //{
-        //    return await todoContext.Boards
-        //        .Include(b => b.Todos)
-        //        .SingleOrDefaultAsync(expression);
-                
-        //}
-
-        public async Task<ICollection<Board>> GetBoardsByUserAsync(int userId)
+        public async Task AddUserBoardAsync(UserBoard userBoard)
         {
-            return await todoContext.Boards
-                .Where(b => b.UserBoards.Any(ub => ub.UserId == userId))
-                .ToListAsync(); 
+            await todoContext.UserBoards.AddAsync(userBoard);
         }
+
+       
     }
 }
