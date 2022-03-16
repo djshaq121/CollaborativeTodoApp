@@ -55,28 +55,38 @@ namespace Todo.Service.Controllers
             var username = User.GetUsername();
             var user = await unitOfWork.UserRepository.GetUserByUsernameAsync(username);
 
-            var boards = await unitOfWork.BoardRepository.GetBoardsByUserAsync(user.Id);
+            var boards = await unitOfWork.BoardRepository.GetBoardsByUserAsync(x => x.UserBoards.Any(ub => ub.UserId == user.Id));
 
-            return Ok(boards.Select(x => x.AsDto()));
+            var ownedBoards = boards.Where(x => x.UserBoards.Any(ub => ub.BoardPermissionId == 1));
+              
+            var sharedBoard = boards.Where(x => x.UserBoards.Any(ub => ub.BoardPermissionId != 1));
+
+            var ownedBoardsDto = ownedBoards.Select(b => b.AsDto());
+            var sharedBoardDto = sharedBoard.Select(b => b.AsDto());
+
+            var userBoardsDto = new UserBoardsDto(ownedBoardsDto, sharedBoardDto);
+
+            return Ok(userBoardsDto);
         }
 
         [HttpPost("sharing/generate/{boardId}")]
         public async Task<ActionResult<string>> ShareBoard(int boardId)
         {
             var username = User.GetUsername();
-            var user = await unitOfWork.UserRepository.GetUserByUsernameAsync(username);
 
-            var board = await unitOfWork.BoardRepository.GetBoardByIdAsync(boardId);
+            var userTask = unitOfWork.UserRepository.GetUserByUsernameAsync(username);
+            var boardTask =  unitOfWork.BoardRepository.GetBoardByIdAsync(boardId);
 
-            var boardShare = await shareableService.MakeBoardSharable(user, board);
+            await Task.WhenAll(userTask, boardTask);
+            var boardShare = await shareableService.MakeBoardSharable(userTask.Result, boardTask.Result);
             if (boardShare == null)
                 return BadRequest();
 
             return Ok(boardShare.Token);
         }
 
-        [HttpGet("sharing/invite/{token}")]
-        public async Task<ActionResult> Invite(string token)
+        [HttpPost("sharing")]
+        public async Task<ActionResult> Invite([FromQuery] string token)
         {
             var username = User.GetUsername();
             var user = await unitOfWork.UserRepository.GetUserByUsernameAsync(username);

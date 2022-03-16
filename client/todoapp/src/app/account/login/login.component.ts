@@ -11,8 +11,12 @@ import { AccountService } from 'src/app/services/account.service';
 export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
+  redirectUrl: string = null;
   
-  constructor(private accountService: AccountService, private formBuilder: FormBuilder, private router: Router) { }
+  constructor(private accountService: AccountService, private formBuilder: FormBuilder, private router: Router) {
+    const navigation = this.router.getCurrentNavigation();
+    this.redirectUrl = navigation?.extras?.queryParams?.returnUrl;
+  }
 
   ngOnInit(): void {
     this.initForm();
@@ -28,7 +32,7 @@ export class LoginComponent implements OnInit {
   login() {
       this.accountService.login(this.loginForm.value).subscribe(
         () => {
-          this.router.navigateByUrl('/');
+          this.router.navigateByUrl(this.redirectUrl || '/');
         });
   }
 

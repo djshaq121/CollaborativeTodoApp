@@ -7,6 +7,7 @@ import { Board } from '../model/board';
 import { TodoService } from './todo.service';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr'
 import { User } from '../model/user';
+import { Boards } from '../model/boards';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +19,11 @@ export class BoardService {
 
   private hubConnection!: HubConnection;
 
-  private boardsSource = new ReplaySubject<Board[]>(1);
-  boards$ = this.boardsSource.asObservable();
+  private ownerBoardsSource = new ReplaySubject<Board[]>(1);
+  ownerBoards$ = this.ownerBoardsSource.asObservable();
+
+  private sharedBoardsSource = new ReplaySubject<Board[]>(1);
+  sharedBoards$ = this.sharedBoardsSource.asObservable();
 
   private selectedBoardSource = new BehaviorSubject<Board>(null);
   currentBoard$ = this.selectedBoardSource.asObservable();
@@ -75,17 +79,18 @@ export class BoardService {
   createBoard(boardName: string) {
     return this.http.post<Board>(this.baseurl + 'board?name=' + boardName, {}).pipe(
       map((response) => {
-          this.boards$.pipe(take(1)).subscribe(boards => {
-            this.boardsSource.next([...boards, response]);
+          this.ownerBoards$.pipe(take(1)).subscribe(boards => {
+            this.ownerBoardsSource.next([...boards, response]);
           });
       })
     );
   }
 
   getBoards() {
-    return this.http.get<Board[]>(this.baseurl + 'board').pipe(
+    return this.http.get<Boards>(this.baseurl + 'board').pipe(
       map(reponse => {
-        this.boardsSource.next(reponse);
+        this.ownerBoardsSource.next(reponse.ownerBoards);
+        this.sharedBoardsSource.next(reponse.sharedBoards);
       })
     );
   }
@@ -106,6 +111,11 @@ export class BoardService {
     const board = this.selectedBoardSource.value;
     return this.hubConnection.invoke('SendTodo', {BoardId: board.id, Task: todoItem.task, IsCompleted: todoItem.isCompleted})
       .catch(error => console.log("error"));
+  }
+
+  addUserToBoard(token: string) {
+
+    return this.http.put(this.baseurl + 'board/sharing?=' + token, {});
   }
 
 

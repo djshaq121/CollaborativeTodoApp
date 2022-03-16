@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Todo.Service.Data;
 using Todo.Service.Entities;
@@ -28,6 +29,13 @@ namespace Todo.Service.Repositories
         {
             return await todoContext.Boards
                 .Where(b => b.UserBoards.Any(ub => ub.UserId == userId))
+                .ToListAsync();
+        }
+
+        public async Task<ICollection<Board>> GetBoardsByUserAsync(Expression<Func<Board, bool>> expression)
+        {
+            return await todoContext.Boards
+                .Where(expression)
                 .ToListAsync();
         }
 

@@ -15,6 +15,7 @@ import { HomeComponent } from './home/home.component';
 import { JwtInterceptor } from './_Interceptors/jwt.interceptor';
 import { MenuComponent } from './menu/menu.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { InvitationComponent } from './share/invitation/invitation.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     RegisterComponent,
     HomeComponent,
     MenuComponent,
-    DashboardComponent
+    DashboardComponent,
+    InvitationComponent
   ],
   imports: [
     BrowserModule,

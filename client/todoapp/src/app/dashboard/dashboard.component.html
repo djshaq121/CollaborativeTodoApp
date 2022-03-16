@@ -4,7 +4,13 @@
 </div>
 <div *ngIf="this.boardService.currentBoard$ | async">
     
-    <h3> {{(this.boardService.currentBoard$ | async).title }} </h3>
+    <div class="container-fluid">
+        <div class="row justify-content-between">
+            <h3 class="board-title col-4"> {{(this.boardService.currentBoard$ | async).title }} </h3>
+            <a class="share col-4" href=""> <i class="fa-solid fa-user-plus"></i></a>
+        </div>
+
+    </div>
 
     <form [formGroup]='createTodoForm' class="input-group mt-3 mb-3 row" (ngSubmit)="createTodo()" > 
         <span class="input-group-prepend input-group-text"><i class="fa fa-plus " aria-hidden="true"></i></span>

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Todo.Service.Entities;
 using Todo.Service.TodoDtos;
@@ -12,6 +14,8 @@ namespace Todo.Service.Repositories
         Task<Board> GetBoardByIdAsync(int id);
 
         Task<ICollection<Board>> GetBoardsByUserAsync(int userId);
+
+        Task<ICollection<Board>> GetBoardsByUserAsync(Expression<Func<Board, bool>> expression);
 
     }
 }

@@ -16,11 +16,28 @@
         </div>
         <div class="col">
             <ul class="list-unstyled">
-                <li class="board d-flex justify-content-between mb-2" *ngFor="let board of (boardService.boards$ | async)" (click)="selectBoard(board)">
+                <li class="board d-flex justify-content-between mb-2" *ngFor="let board of (boardService.ownerBoards$ | async)" (click)="selectBoard(board)">
                     <h6 class="">{{board.title}} </h6>
                     <span class="text-muted">  {{ board.createdDate | date: 'dd/MM/yyyy'}} </span>
                 </li>
             </ul>
         </div>
+
+        <div class="col-12" *ngIf="(boardService.sharedBoards$ | async)?.length == 0 ">
+            <p>No one shared a board with you lol</p>
+        </div>
+        <ng-container *ngIf="(boardService.sharedBoards$ | async)?.length > 0">
+            <div class="col-12">
+                <h4>Shared: </h4>
+            </div>
+            <div class="col">
+                <ul class="list-unstyled">
+                    <li class="board d-flex justify-content-between mb-2" *ngFor="let board of (boardService.sharedBoards$ | async)" (click)="selectBoard(board)">
+                        <h6 class="">{{board.title}} </h6>
+                        <span class="text-muted">  {{ board.createdDate | date: 'dd/MM/yyyy'}} </span>
+                    </li>
+                </ul>
+            </div>
+        </ng-container>
     </div> 
 </div>
