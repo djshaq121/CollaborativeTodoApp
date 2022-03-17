@@ -74,15 +74,14 @@ namespace Todo.Service.Controllers
         {
             var username = User.GetUsername();
 
-            var userTask = unitOfWork.UserRepository.GetUserByUsernameAsync(username);
-            var boardTask =  unitOfWork.BoardRepository.GetBoardByIdAsync(boardId);
+            var user = await unitOfWork.UserRepository.GetUserByUsernameAsync(username);
+            var board =  await unitOfWork.BoardRepository.GetBoardByIdAsync(boardId);
 
-            await Task.WhenAll(userTask, boardTask);
-            var boardShare = await shareableService.MakeBoardSharable(userTask.Result, boardTask.Result);
+            var boardShare = await shareableService.MakeBoardSharable(user, board);
             if (boardShare == null)
                 return BadRequest();
 
-            return Ok(boardShare.Token);
+            return Ok(new { token = boardShare.Token });
         }
 
         [HttpPost("sharing")]

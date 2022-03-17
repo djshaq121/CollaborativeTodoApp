@@ -7,7 +7,7 @@
     <div class="container-fluid">
         <div class="row justify-content-between">
             <h3 class="board-title col-4"> {{(this.boardService.currentBoard$ | async).title }} </h3>
-            <a class="share col-4" href=""> <i class="fa-solid fa-user-plus"></i></a>
+            <a class="share col-4" (click)="openShareModal()"> <i class="fa-solid fa-user-plus"></i></a>
         </div>
 
     </div>

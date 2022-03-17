@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { User } from '../model/user';
@@ -14,6 +14,9 @@ export class AccountService {
 
   private currentUserSource = new ReplaySubject<User>(1);
   currentUser$ = this.currentUserSource.asObservable();
+
+  private logOutSource = new Subject();
+  logOutUser$ = this.logOutSource.asObservable();
   
   constructor(private http: HttpClient) { }
 
@@ -31,6 +34,8 @@ export class AccountService {
   logout() {
     this.setCurrentUser(null);
     localStorage.removeItem('user');
+
+    this.logOutSource.next();
   }
 
   register(userCreditials: any) {

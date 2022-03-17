@@ -10,6 +10,8 @@ import { BoardService } from '../services/board.service';
 export class DashboardComponent implements OnInit {
 
   createTodoForm!: FormGroup;
+  sharingLink = "http://localhost:4200/board/sharing/";
+  sharingLinkToken = '';
 
   constructor(public boardService: BoardService,  private formBuilder: FormBuilder) { }
 
@@ -28,6 +30,20 @@ export class DashboardComponent implements OnInit {
     this.boardService.createTodo(this.createTodoForm.value).then(() => {
       this.createTodoForm.reset();
     })
+  }
+
+  openShareModal() {
+    if(this.sharingLinkToken !== "") {
+      alert(this.sharingLink);
+      return;
+    }
+
+    this.boardService.shareBoard().subscribe(
+      response => {
+        this.sharingLinkToken = response;
+        this.sharingLink += this.sharingLinkToken;
+        alert(this.sharingLink);
+      },);
   }
 
   updateTodo() {

@@ -23,6 +23,7 @@ export class InvitationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.shareBoardWithUser();
   }
 
   shareBoardWithUser() {

@@ -8,6 +8,7 @@ import { TodoService } from './todo.service';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr'
 import { User } from '../model/user';
 import { Boards } from '../model/boards';
+import { AccountService } from './account.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,9 @@ export class BoardService {
   private selectedBoardSource = new BehaviorSubject<Board>(null);
   currentBoard$ = this.selectedBoardSource.asObservable();
   
-  constructor(private http: HttpClient, private todoService: TodoService) { }
+  constructor(private http: HttpClient, private todoService: TodoService,  private accountService: AccountService) {
+    this.accountService.logOutUser$.subscribe(() => this.onLogOutUser());
+   }
 
   async createHubConnection(user: User, boardId: number) {
     await this.stopHubConnection(); // Discount from current hub first
@@ -64,6 +67,11 @@ export class BoardService {
     }
 
     return Promise.resolve();
+  }
+
+  onLogOutUser() {
+    this.selectedBoardSource.next(null);
+    
   }
 
   private updateTodoItem(updatedTodoItem: Todo) {
@@ -113,9 +121,19 @@ export class BoardService {
       .catch(error => console.log("error"));
   }
 
-  addUserToBoard(token: string) {
 
-    return this.http.put(this.baseurl + 'board/sharing?=' + token, {});
+  // SHARING
+  addUserToBoard(token: string) {
+    return this.http.post(this.baseurl + 'board/sharing?token=' + token, {});
+  }
+
+  shareBoard() {
+    const board = this.selectedBoardSource.value;
+    return this.http.post<any>(this.baseurl + 'board/sharing/generate/' + board.id, {}).pipe(
+      map(response => {
+        return response.token;
+      })
+    );
   }
 
 
