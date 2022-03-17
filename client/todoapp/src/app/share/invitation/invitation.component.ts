@@ -18,7 +18,7 @@ export class InvitationComponent implements OnInit {
 
   constructor(private activatedroute:ActivatedRoute, public accountService: AccountService, private boardService: BoardService, private router: Router) { 
     this.token = this.activatedroute.snapshot.paramMap.get("token");
-    this.redirectUrl = 'board/sharing/'+this.token;
+    this.redirectUrl = '/board/sharing/'+this.token;
     console.log(this.token);
   }
 
@@ -41,7 +41,7 @@ export class InvitationComponent implements OnInit {
   }
 
   redirectTo(url: string) {
-    this.router.navigate([url], { queryParams: { returnUrl: this.redirectUrl } });
+    this.router.navigate([url], { queryParams: { returnUrl: this.redirectUrl, } });
   }
 
   invitationSucceed() {

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { LoginComponent } from '../account/login/login.component';
 import { BoardService } from '../services/board.service';
+import { ShareModalComponent } from '../share/share-modal/share-modal.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,8 +15,9 @@ export class DashboardComponent implements OnInit {
   createTodoForm!: FormGroup;
   sharingLink = "http://localhost:4200/board/sharing/";
   sharingLinkToken = '';
+  bsModalRef: BsModalRef;
 
-  constructor(public boardService: BoardService,  private formBuilder: FormBuilder) { }
+  constructor(public boardService: BoardService,  private formBuilder: FormBuilder, private modalService: BsModalService) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -34,7 +38,7 @@ export class DashboardComponent implements OnInit {
 
   openShareModal() {
     if(this.sharingLinkToken !== "") {
-      alert(this.sharingLink);
+      this.bsModalRef = this.modalService.show(ShareModalComponent, { initialState: { shareLink: this.sharingLink}});
       return;
     }
 
@@ -42,7 +46,7 @@ export class DashboardComponent implements OnInit {
       response => {
         this.sharingLinkToken = response;
         this.sharingLink += this.sharingLinkToken;
-        alert(this.sharingLink);
+        this.bsModalRef = this.modalService.show(ShareModalComponent, { initialState: { shareLink: this.sharingLink}});
       },);
   }
 

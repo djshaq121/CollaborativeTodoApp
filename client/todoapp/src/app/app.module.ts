@@ -16,6 +16,8 @@ import { JwtInterceptor } from './_Interceptors/jwt.interceptor';
 import { MenuComponent } from './menu/menu.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { InvitationComponent } from './share/invitation/invitation.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { ShareModalComponent } from './share/share-modal/share-modal.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,8 @@ import { InvitationComponent } from './share/invitation/invitation.component';
     HomeComponent,
     MenuComponent,
     DashboardComponent,
-    InvitationComponent
+    InvitationComponent,
+    ShareModalComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +39,8 @@ import { InvitationComponent } from './share/invitation/invitation.component';
     ReactiveFormsModule,
     FormsModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ModalModule.forRoot(),
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
